@@ -6,19 +6,24 @@
     <title>LipidPro CDSS - 啟動授權</title>
     <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f3f4f6; }
-        .loader-box { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f3f4f6; margin: 0; }
+        .loader-box { background: white; padding: 2rem 3rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="loader-box">
-        <h3>🔄 系統啟動中</h3>
-        <p>正在與電子病歷系統 (EHR) 進行安全連線與授權...</p>
+        <div class="spinner"></div>
+        <h3 style="color: #1f2937; margin-bottom: 8px;">LipidPro 系統啟動中</h3>
+        <p style="color: #6b7280; font-size: 14px;">正在與電子病歷系統 (EHR) 進行安全連線與授權...</p>
     </div>
 
     <script>
         // 啟動 SMART on FHIR 授權流程
         FHIR.oauth2.authorize({
+            // ✨ 這是修復報錯的關鍵：宣告 App 的身分識別碼
+            clientId: "lipidpro-cdss-app",
             // 申請讀取病患基本資料、診斷紀錄、檢驗紀錄的權限
             scope: "patient/Patient.read patient/Condition.read patient/Observation.read launch online_access openid profile",
             // 授權成功後，跳轉到決策儀表板
